@@ -1,0 +1,67 @@
+<%- include('../../fragments/header.ejs') %>
+<script type="application/javascript" src="/js/validationCommon.js"></script>
+<script type="application/javascript" src="/js/validationCaretakerForm.js"></script>
+<main>
+  <h2><%= pageTitle %></h2>
+  <form class="form" method="post" action="<%= formAction %>" novalidate onsubmit="return validateForm();">
+    <input type="hidden" name="_id" value="<%= caretaker._id %>">
+
+    <label for="name">Imię: <span class="symbol-required">*</span></label>
+    <input type="text" name="name" id="name" value="<%= caretaker.name %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorName" class="errors-text"></span>
+
+    <label for="surname">Nazwisko: <span class="symbol-required">*</span></label>
+    <input type="text" name="surname" id="surname" value="<%= caretaker.surname %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorSurname" class="errors-text"></span>
+
+    <label for="email">Email: <span class="symbol-required">*</span></label>
+    <input type="email" name="email" id="email" value="<%= caretaker.email %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorEmail" class="errors-text"></span>
+
+    <label for="primaryRole">Główna rola: <span class="symbol-required">*</span></label>
+    <input type="text" name="primaryRole" id="primaryRole" value="<%= caretaker.primaryRole %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorPrimaryRole" class="errors-text"></span>
+
+    <div class="form-buttons">
+      <p id="errorsSummary" class="errors-text"></p>
+      <% if (formMode != 'showDetails') { %>
+        <input class="form-button-submit" type="submit" value="<%= btnLabel %>" />
+        <a class="form-button-cancel" href="/caretakers">Anuluj</a>
+      <% } else { %>
+        <a class="form-button-submit" href="/caretakers/edit/<%= caretaker._id %>" >Edytuj</a>
+        <a class="form-button-cancel" href="/caretakers">Powrót</a>
+      <% } %>
+    </div>
+  </form>
+
+  <% if (formMode == 'showDetails' || formMode == 'edit') { %>
+    <h2>Szczegóły opieki</h2>
+    <table class="table-list">
+      <thead>
+      <tr>
+        <th>Kot</th>
+        <th>Data od</th>
+        <th>Data do</th>
+        <th>Łączny koszt</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+      <% for (let e of caretaker.cares) { %>
+        <tr>
+          <td><a href="/cats/details/<%= e.cat._id %>"><%= e.cat.name %></a></td>
+          <td><%= e.dateFrom.toISOString().substring(0,16).replace('T', ' ') %></td>
+          <td><%= e.dateTo.toISOString().substring(0,16).replace('T', ' ') %></td>
+          <td><%= e.totalCost %></td>
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>

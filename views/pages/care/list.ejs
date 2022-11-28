@@ -1,0 +1,38 @@
+<%- include('../../fragments/header.ejs') %>
+
+<main>
+  <h2>Lista opieki</h2>
+  <table class="table-list">
+    <thead>
+    <tr>
+      <th>Kot</th>
+      <th>Opiekun</th>
+      <th>Data od</th>
+      <th>Data do</th>
+      <th>Łączny koszt</th>
+      <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (let care of cares) { %>
+      <tr>
+        <td><%= care.cat.name %></td>
+        <td><%= care.caretaker.name%> <%=care.caretaker.surname %></td>
+        <td><%= care.dateFrom.toISOString().substring(0,16).replace('T', ' ') %></td>
+        <td><%= care.dateTo.toISOString().substring(0,16).replace('T', ' ') %></td>
+        <td><%= care.totalCost %></td>
+        <td>
+          <ul class="list-actions">
+            <li><a href="/cares/details/<%=care._id%>" class="list-actions-button-details">Szczegóły</a></li>
+            <li><a href="/cares/edit/<%=care._id%>" class="list-actions-button-edit">Edytuj</a></li>
+            <li><a href="/cares/delete/<%=care._id%>" class="list-actions-button-delete">Usuń</a></li>
+          </ul>
+        </td>
+      </tr>
+    <% } %>
+    </tbody>
+  </table>
+  <p><a href="/cares/add" class="button-add">Dodaj nowy rekord opieki</a></p>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>

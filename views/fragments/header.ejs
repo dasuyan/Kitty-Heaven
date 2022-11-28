@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitty Heaven</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+    <h1>Kitty Heaven</h1>
+    <img src="/images/logo.png" alt="Kitty Heaven Logo">
+</header>
+<nav>
+    <ul>
+        <li><a href="/" class="<%= navLocation === 'main' ? 'active' : '' %>">Strona główna</a></li>
+        <li><a href="/cats" class="<%= navLocation === 'cat' ? 'active' : '' %>">Koty</a></li>
+        <li><a href="/caretakers" class="<%= navLocation === 'caretaker' ? 'active' : '' %>">Opiekunowie</a></li>
+        <li><a href="/cares" class="<%= navLocation === 'care' ? 'active' : '' %>">Opieka</a></li>
+    </ul>
+</nav>

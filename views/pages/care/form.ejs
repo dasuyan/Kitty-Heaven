@@ -1,0 +1,97 @@
+<%- include('../../fragments/header.ejs') %>
+<script type="application/javascript" src="/js/validationCommon.js"></script>
+<script type="application/javascript" src="/js/validationCareForm.js"></script>
+<main>
+  <h2><%= pageTitle %></h2>
+  <form class="form" method="post" action="<%= formAction %>" novalidate onsubmit="return validateForm();">
+    <input type="hidden" name="_id" value="<%= care._id %>">
+
+    <label for="cat">Kot: <span class="symbol-required">*</span></label>
+    <select id="cat" name="cat_id" <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
+      <option value="" selected>-- Wybierz kota --</option>
+      <% for (let i=0; i<allCats.length; i++) { let cat = allCats[i]; %>
+          <option value="<%= cat._id %>" label="<%= cat.name %>"
+              <%= (care._id && cat._id.toString() == care.cat._id.toString()) ? 'selected' : ''%>></option>
+      <% } %>
+    </select>
+    <span id="errorCat" class="errors-text"></span>
+
+    <label for="caretaker">Opiekun: <span class="symbol-required">*</span></label>
+    <select id="caretaker" name="caretaker_id"  <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
+      <option value="" selected>-- Wybierz opiekuna --</option>
+      <% for (let i=0; i<allCaretakers.length; i++) { let caretaker = allCaretakers[i]; %>
+      <option value="<%= caretaker._id %>" label="<%= caretaker.name + ' ' + caretaker.surname %>"
+              <%= (care._id && caretaker._id.toString() == care.caretaker._id.toString()) ? 'selected' : ''%>></option>
+      <% } %>
+    </select>
+    <span id="errorCaretaker" class="errors-text"></span>
+
+    <label for="dateFrom">Data od: <span class="symbol-required">*</span></label>
+    <input type="datetime-local" name="dateFrom" id="dateFrom" value="<%= (formMode == 'createNew') ? care.dateFrom : care.dateFrom.toISOString().substring(0,16).replace('T', ' ') %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorDateFrom" class="errors-text"></span>
+
+    <label for="dateTo">Data do: <span class="symbol-required">*</span></label>
+    <input type="datetime-local" name="dateTo" id="dateTo" value="<%= (formMode == 'createNew') ? care.dateTo : care.dateTo.toISOString().substring(0,16).replace('T', ' ') %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorDateTo" class="errors-text"></span>
+
+    <label for="totalCost">Łączny koszt: <span class="symbol-required">*</span></label>
+    <input type="number" name="totalCost" id="totalCost" min="0" placeholder="Min. 0" value="<%= care.totalCost %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorTotalCost" class="errors-text"></span>
+
+    <div class="form-buttons">
+      <p id="errorsSummary" class="errors-text"></p>
+      <% if (formMode != 'showDetails') { %>
+        <input class="form-button-submit" type="submit" value="<%= btnLabel %>" />
+        <a class="form-button-cancel" href="/cares">Anuluj</a>
+      <% } else { %>
+        <a class="form-button-submit" href="/cares/edit/<%= care._id %>" >Edytuj</a>
+        <a class="form-button-cancel" href="/cares">Powrót</a>
+      <% } %>
+    </div>
+  </form>
+
+  <% if (formMode == 'showDetails' || formMode == 'edit') { %>
+    <h3>Szczegóły kota</h3>
+    <table class="table-list">
+      <thead>
+      <tr>
+        <th>Imię</th>
+        <th>Wiek</th>
+        <th>Rasa</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+        <tr>
+          <td><a href="/cats/details/<%= care.cat._id %>"><%= care.cat.name %></a></td>
+          <td><%= care.cat.age %></td>
+          <td><%= care.cat.breed %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Szczegóły opiekuna</h3>
+    <table class="table-list">
+      <thead>
+      <tr>
+        <th>Imię i nazwisko</th>
+        <th>Email</th>
+        <th>Główna rola</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+        <tr>
+          <td><a href="/caretakers/details/<%= care.caretaker._id %>"><%= care.caretaker.name %> <%= care.caretaker.surname %></a></td>
+          <td><%= care.caretaker.email %></td>
+          <td><%= care.caretaker.primaryRole %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% } %>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>

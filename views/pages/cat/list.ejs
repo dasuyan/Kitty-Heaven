@@ -1,0 +1,34 @@
+<%- include('../../fragments/header.ejs') %>
+
+<main>
+  <h2>Lista kotów</h2>
+  <table class="table-list">
+    <thead>
+    <tr>
+      <th>Imię</th>
+      <th>Wiek</th>
+      <th>Rasa</th>
+      <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (let cat of cats) { %>
+      <tr>
+        <td><%= cat.name %> </td>
+        <td><%= cat.age %> </td>
+        <td><%= cat.breed %> </td>
+        <td>
+          <ul class="list-actions">
+            <li><a href="/cats/details/<%=cat._id%>" class="list-actions-button-details">Szczegóły</a></li>
+            <li><a href="/cats/edit/<%=cat._id%>" class="list-actions-button-edit">Edytuj</a></li>
+            <li><a href="/cats/delete/<%=cat._id%>" class="list-actions-button-delete">Usuń</a></li>
+          </ul>
+        </td>
+      </tr>
+    <% } %>
+    </tbody>
+  </table>
+  <p><a href="/cats/add" class="button-add">Dodaj nowego kota</a></p>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>

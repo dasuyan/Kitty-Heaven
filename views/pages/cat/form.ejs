@@ -1,0 +1,61 @@
+<%- include('../../fragments/header.ejs') %>
+<script type="application/javascript" src="/js/validationCommon.js"></script>
+<script type="application/javascript" src="/js/validationCatForm.js"></script>
+<main>
+  <h2><%= pageTitle %></h2>
+  <form class="form" method="post" action="<%= formAction %>" novalidate onsubmit="return validateForm();">
+    <input type="hidden" name="_id" value="<%= cat._id %>">
+
+    <label for="name">Imię: <span class="symbol-required">*</span></label>
+    <input type="text" name="name" id="name" placeholder="2-60 znaków" value="<%= cat.name %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorName" class="errors-text"></span>
+
+    <label for="age">Wiek: <span class="symbol-required">*</span></label>
+    <input type="number" name="age" id="age" min="0" max="50" placeholder="0 do 50 lat" value="<%= cat.age %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+    <span id="errorAge" class="errors-text"></span>
+
+    <label for="breed">Rasa: </label>
+    <input type="text" name="breed" id="breed" value="<%= cat.breed %>"
+            <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
+
+    <div class="form-buttons">
+      <p id="errorsSummary" class="errors-text"></p>
+      <% if (formMode != 'showDetails') { %>
+      <input class="form-button-submit" type="submit" value="<%= btnLabel %>" />
+      <a class="form-button-cancel" href="/cats">Anuluj</a>
+      <% } else { %>
+        <a class="form-button-submit" href="/cats/edit/<%= cat._id %>" >Edytuj</a>
+        <a class="form-button-cancel" href="/cats">Powrót</a>
+      <% } %>
+    </div>
+  </form>
+
+  <% if (formMode == 'showDetails' || formMode == 'edit') { %>
+    <h2>Szczegóły opieki</h2>
+  <table class="table-list">
+    <thead>
+    <tr>
+      <th>Opiekun</th>
+      <th>Data od</th>
+      <th>Data do</th>
+      <th>Łączny koszt</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <% for (let e of cat.cares) { %>
+      <tr>
+        <td><a href="/caretakers/details/<%= e.caretaker._id %>"><%= e.caretaker.name %> <%= e.caretaker.surname %></a></td>
+        <td><%= e.dateFrom.toISOString().substring(0,16).replace('T', ' ') %></td>
+        <td><%= e.dateTo.toISOString().substring(0,16).replace('T', ' ') %></td>
+        <td><%= e.totalCost %></td>
+      </tr>
+    <% } %>
+    </tbody>
+  </table>
+  <% } %>
+</main>
+
+<%- include('../../fragments/footer.ejs') %>
