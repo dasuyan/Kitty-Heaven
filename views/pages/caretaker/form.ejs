@@ -1,30 +1,44 @@
 <%- include('../../fragments/header.ejs') %>
-<script type="application/javascript" src="/js/validationCommon.js"></script>
-<script type="application/javascript" src="/js/validationCaretakerForm.js"></script>
 <main>
   <h2><%= pageTitle %></h2>
-  <form class="form" method="post" action="<%= formAction %>" novalidate onsubmit="return validateForm();">
-    <input type="hidden" name="_id" value="<%= caretaker._id %>">
+  <form class="form" method="post" action="<%= formAction %>" novalidate>
+    <input  type="hidden" name="_id" value="<%= caretaker._id %>">
 
     <label for="name">Imię: <span class="symbol-required">*</span></label>
-    <input type="text" name="name" id="name" value="<%= caretaker.name %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('name')) ? 'error-input' : '' %>" type="text" name="name" id="name" placeholder="2-50 znaków" value="<%= caretaker.name %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorName" class="errors-text"></span>
+    <span id="errorName" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('name'))) { %>
+        <%= validationErrors.find(e => e.path.includes('name')).message %>
+      <% } %>
+    </span>
 
     <label for="surname">Nazwisko: <span class="symbol-required">*</span></label>
-    <input type="text" name="surname" id="surname" value="<%= caretaker.surname %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('surname')) ? 'error-input' : '' %>" type="text" name="surname" id="surname" placeholder="2-50 znaków" value="<%= caretaker.surname %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorSurname" class="errors-text"></span>
+    <span id="errorSurname" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('surname'))) { %>
+        <%= validationErrors.find(e => e.path.includes('surname')).message %>
+      <% } %>
+    </span>
 
     <label for="email">Email: <span class="symbol-required">*</span></label>
-    <input type="email" name="email" id="email" value="<%= caretaker.email %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('email')) ? 'error-input' : '' %>" type="email" name="email" id="email" placeholder="5-50 znaków" value="<%= caretaker.email %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorEmail" class="errors-text"></span>
+    <span id="errorEmail" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('email'))) { %>
+        <%= validationErrors.find(e => e.path.includes('email')).message %>
+      <% } %>
+    </span>
 
     <label for="primaryRole">Główna rola: <span class="symbol-required">*</span></label>
-    <input type="text" name="primaryRole" id="primaryRole" value="<%= caretaker.primaryRole %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('primaryRole')) ? 'error-input' : '' %>" type="text" name="primaryRole" id="primaryRole" placeholder="2-50 znaków" value="<%= caretaker.primaryRole %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorPrimaryRole" class="errors-text"></span>
+    <span id="errorPrimaryRole" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('primaryRole'))) { %>
+        <%= validationErrors.find(e => e.path.includes('primaryRole')).message %>
+      <% } %>
+    </span>
 
     <div class="form-buttons">
       <p id="errorsSummary" class="errors-text"></p>
@@ -38,7 +52,7 @@
     </div>
   </form>
 
-  <% if (formMode == 'showDetails' || formMode == 'edit') { %>
+  <% if ((formMode == 'showDetails' || formMode == 'edit') && validationErrors == '') { %>
     <h2>Szczegóły opieki</h2>
     <table class="table-list">
       <thead>

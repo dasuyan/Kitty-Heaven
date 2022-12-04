@@ -30,7 +30,8 @@ exports.showAddCareForm = (req, res, next) => {
                 pageTitle: 'Nowy opieka',
                 btnLabel: 'Dodaj opiekę',
                 formAction: '/cares/add',
-                navLocation: 'care'
+                navLocation: 'care',
+                validationErrors: []
             });
         });
 };
@@ -56,7 +57,8 @@ exports.showEditCareForm = (req, res, next) => {
                         allCats: allCats,
                         allCaretakers: allCaretakers,
                         formAction: '/cares/edit',
-                        navLocation: 'care'
+                        navLocation: 'care',
+                        validationErrors: []
                     });
                 });
         });
@@ -82,26 +84,75 @@ exports.showCareDetails = (req, res, next) => {
                         allCats: allCats,
                         allCaretakers: allCaretakers,
                         formAction: '',
-                        navLocation: 'care'
+                        navLocation: 'care',
+                        validationErrors: []
                     });
                 });
         });
 };
 
 exports.addCare = (req, res, next) => {
-    const careData = { ...req.body };
-    CareRepository.createCare(careData)
-        .then( result => {
-            res.redirect('/cares');
-        });
+    let a ="ass";
+    a.toI
+    let allCats, allCaretakers;
+    CatRepository.getCats()
+        .then(cats => {
+            allCats = cats;
+            return CaretakerRepository.getCaretakers();
+        })
+        .then(caretakers => {
+            allCaretakers = caretakers;
+
+            const careData = { ...req.body };
+            CareRepository.createCare(careData)
+                .then( result => {
+                    res.redirect('/cares');
+                })
+                .catch(err => {
+                    res.render('pages/care/form', {
+                        care: careData,
+                        formMode: 'createNew',
+                        allCats: allCats,
+                        allCaretakers: allCaretakers,
+                        pageTitle: 'Nowy opieka',
+                        btnLabel: 'Dodaj opiekę',
+                        formAction: '/cares/add',
+                        navLocation: 'care',
+                        validationErrors: err.errors
+                    })
+                });
+            });
 };
 
 exports.updateCare = (req, res, next) => {
-    const careId = req.body._id;
-    const careData = { ...req.body };
-    CareRepository.updateCare(careId, careData)
-        .then( result => {
-            res.redirect('/cares');
+    let allCats, allCaretakers;
+    CatRepository.getCats()
+        .then(cats => {
+            allCats = cats;
+            return CaretakerRepository.getCaretakers();
+        })
+        .then(caretakers => {
+            allCaretakers = caretakers;
+
+            const careId = req.body._id;
+            const careData = { ...req.body };
+            CareRepository.updateCare(careId, careData)
+                .then( result => {
+                    res.redirect('/cares');
+                })
+                .catch(err => {
+                    res.render('pages/care/form', {
+                        care: careData,
+                        formMode: 'edit',
+                        pageTitle: 'Edycja opieki',
+                        btnLabel: 'Edytuj opiekę',
+                        allCats: allCats,
+                        allCaretakers: allCaretakers,
+                        formAction: '/cares/edit',
+                        navLocation: 'care',
+                        validationErrors: err.errors
+                    })
+                });
         });
 };
 

@@ -18,8 +18,8 @@
       <tr>
         <td><%= care.cat.name %></td>
         <td><%= care.caretaker.name%> <%=care.caretaker.surname %></td>
-        <td><%= care.dateFrom.toISOString().substring(0,16).replace('T', ' ') %></td>
-        <td><%= care.dateTo.toISOString().substring(0,16).replace('T', ' ') %></td>
+        <td><%= fmt.formatDate(care.dateFrom) %></td>
+        <td><%= fmt.formatDate(care.dateTo) %></td>
         <td><%= care.totalCost %></td>
         <td>
           <ul class="list-actions">

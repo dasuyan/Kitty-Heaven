@@ -10,23 +10,65 @@ const Care = sequelize.define('Care', {
     },
     dateFrom: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Pole jest wymagane"
+            },
+            isDate: {
+                msg: "Pole powinno zawierać datę"
+            }
+        }
     },
     dateTo: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Pole jest wymagane"
+            },
+            isDate: {
+                msg: "Pole powinno zawierać datę"
+            }
+        }
     },
     totalCost: {
         type: Sequelize.DECIMAL(10,2),
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Pole jest wymagane"
+            },
+            isDecimal: {
+                msg: "Pole powinno zawierać liczbę"
+            },
+            min: {
+                args: [0],
+                msg: "Pole powinno zawierać liczbę większą lub równą 0"
+            },
+            max: {
+                args: [1000000],
+                msg: "Pole powinno zawierać liczbę mniejszą niż 1000000"
+            }
+        }
     },
     cat_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Pole jest wymagane"
+            }
+        }
     },
     caretaker_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Pole jest wymagane"
+            }
+        }
     }
 });
 

@@ -1,45 +1,63 @@
 <%- include('../../fragments/header.ejs') %>
-<script type="application/javascript" src="/js/validationCommon.js"></script>
-<script type="application/javascript" src="/js/validationCareForm.js"></script>
 <main>
   <h2><%= pageTitle %></h2>
-  <form class="form" method="post" action="<%= formAction %>" novalidate onsubmit="return validateForm();">
+  <form class="form" method="post" action="<%= formAction %>" novalidate>
     <input type="hidden" name="_id" value="<%= care._id %>">
 
     <label for="cat">Kot: <span class="symbol-required">*</span></label>
-    <select id="cat" name="cat_id" <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
+    <select class="<%= validationErrors.find(e => e.path.includes('cat_id')) ? 'error-input' : '' %>" id="cat" name="cat_id" <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
       <option value="" selected>-- Wybierz kota --</option>
       <% for (let i=0; i<allCats.length; i++) { let cat = allCats[i]; %>
           <option value="<%= cat._id %>" label="<%= cat.name %>"
-              <%= (care._id && cat._id.toString() == care.cat._id.toString()) ? 'selected' : ''%>></option>
+              <%= (validationErrors == '' && care._id && cat._id.toString() == care.cat._id.toString()) ? 'selected' : ''%>></option>
       <% } %>
     </select>
-    <span id="errorCat" class="errors-text"></span>
+    <span id="errorCat" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('cat_id'))) { %>
+        <%= validationErrors.find(e => e.path.includes('cat_id')).message %>
+      <% } %>
+    </span>
 
     <label for="caretaker">Opiekun: <span class="symbol-required">*</span></label>
-    <select id="caretaker" name="caretaker_id"  <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
+    <select class="<%= validationErrors.find(e => e.path.includes('caretaker_id')) ? 'error-input' : '' %>" id="caretaker" name="caretaker_id"  <%= (formMode == 'showDetails') ? 'disabled' : ''%> >
       <option value="" selected>-- Wybierz opiekuna --</option>
       <% for (let i=0; i<allCaretakers.length; i++) { let caretaker = allCaretakers[i]; %>
       <option value="<%= caretaker._id %>" label="<%= caretaker.name + ' ' + caretaker.surname %>"
-              <%= (care._id && caretaker._id.toString() == care.caretaker._id.toString()) ? 'selected' : ''%>></option>
+              <%= (validationErrors == '' && care._id && caretaker._id.toString() == care.caretaker._id.toString()) ? 'selected' : ''%>></option>
       <% } %>
     </select>
-    <span id="errorCaretaker" class="errors-text"></span>
+    <span id="errorCaretaker" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('caretaker_id'))) { %>
+        <%= validationErrors.find(e => e.path.includes('caretaker_id')).message %>
+      <% } %>
+    </span>
 
     <label for="dateFrom">Data od: <span class="symbol-required">*</span></label>
-    <input type="datetime-local" name="dateFrom" id="dateFrom" value="<%= (formMode == 'createNew') ? care.dateFrom : care.dateFrom.toISOString().substring(0,16).replace('T', ' ') %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('dateFrom')) ? 'error-input' : '' %>" type="datetime-local" name="dateFrom" id="dateFrom" value="<%= fmt.formatDate(care.dateFrom) %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorDateFrom" class="errors-text"></span>
+    <span id="errorDateFrom" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('dateFrom'))) { %>
+        <%= validationErrors.find(e => e.path.includes('dateFrom')).message %>
+      <% } %>
+    </span>
 
     <label for="dateTo">Data do: <span class="symbol-required">*</span></label>
-    <input type="datetime-local" name="dateTo" id="dateTo" value="<%= (formMode == 'createNew') ? care.dateTo : care.dateTo.toISOString().substring(0,16).replace('T', ' ') %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('dateTo')) ? 'error-input' : '' %>" type="datetime-local" name="dateTo" id="dateTo" value="<%= fmt.formatDate(care.dateTo) %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorDateTo" class="errors-text"></span>
+    <span id="errorDateTo" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('dateTo'))) { %>
+        <%= validationErrors.find(e => e.path.includes('dateTo')).message %>
+      <% } %>
+    </span>
 
     <label for="totalCost">Łączny koszt: <span class="symbol-required">*</span></label>
-    <input type="number" name="totalCost" id="totalCost" min="0" placeholder="Min. 0" value="<%= care.totalCost %>"
+    <input class="<%= validationErrors.find(e => e.path.includes('totalCost')) ? 'error-input' : '' %>" type="number" name="totalCost" id="totalCost" min="0" placeholder="Min. 0" value="<%= care.totalCost %>"
             <%= (formMode == 'showDetails') ? 'disabled' : '' %>/>
-    <span id="errorTotalCost" class="errors-text"></span>
+    <span id="errorTotalCost" class="errors-text">
+      <% if (validationErrors.find(e => e.path.includes('totalCost'))) { %>
+        <%= validationErrors.find(e => e.path.includes('totalCost')).message %>
+      <% } %>
+    </span>
 
     <div class="form-buttons">
       <p id="errorsSummary" class="errors-text"></p>
@@ -53,7 +71,7 @@
     </div>
   </form>
 
-  <% if (formMode == 'showDetails' || formMode == 'edit') { %>
+  <% if ((formMode == 'showDetails' || formMode == 'edit') && validationErrors == '') { %>
     <h3>Szczegóły kota</h3>
     <table class="table-list">
       <thead>

@@ -4,6 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var app = express();
+
+const fmt = require('./utils/dateFormatting');
+app.use((req, res, next) => {
+    res.locals.fmt = fmt;
+    next();
+});
+
 var indexRouter = require('./routes/index');
 const caretakerRouter = require('./routes/caretakerRoute');
 const careRouter = require('./routes/careRoute');
@@ -14,7 +22,7 @@ const careApiRouter = require('./routes/api/CareApiRoute');
 
 const sequelizeInit = require('./config/sequelize/init');
 
-var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

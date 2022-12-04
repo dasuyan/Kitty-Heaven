@@ -17,7 +17,8 @@ exports.showAddCaretakerForm = (req, res, next) => {
         pageTitle: 'Nowy opiekun',
         btnLabel: 'Dodaj opiekuna',
         formAction: '/caretakers/add',
-        navLocation: 'caretaker'
+        navLocation: 'caretaker',
+        validationErrors: []
     });
 };
 
@@ -31,7 +32,8 @@ exports.showEditCaretakerForm = (req, res, next) => {
                 pageTitle: 'Edycja opiekuna',
                 btnLabel: 'Edytuj opiekuna',
                 formAction: '/caretakers/edit',
-                navLocation: 'caretaker'
+                navLocation: 'caretaker',
+                validationErrors: []
             });
         });
 };
@@ -45,7 +47,8 @@ exports.showCaretakerDetails = (req, res, next) => {
                 formMode: 'showDetails',
                 pageTitle: 'Szczegóły opiekuna',
                 formAction: '',
-                navLocation: 'caretaker'
+                navLocation: 'caretaker',
+                validationErrors: []
             });
         });
 };
@@ -55,15 +58,48 @@ exports.addCaretaker = (req, res, next) => {
     CaretakerRepository.createCaretaker(caretakerData)
         .then( result => {
             res.redirect('/caretakers');
+        })
+        .catch(err => {
+            err.errors.forEach(e => {
+                if (e.path.includes('email') && e.type == 'unique violation') {
+                    e.message = "Podany adres email jest już używany";
+                }
+            });
+            res.render('pages/caretaker/form', {
+                caretaker: caretakerData,
+                formMode: 'createNew',
+                pageTitle: 'Nowy opiekun',
+                btnLabel: 'Dodaj opiekuna',
+                formAction: '/caretakers/add',
+                navLocation: 'caretaker',
+                validationErrors: err.errors
+            })
         });
 };
 
 exports.updateCaretaker = (req, res, next) => {
     const caretakerId = req.body._id;
     const caretakerData = { ...req.body };
+    const caretaker = CaretakerRepository.getCaretakerById(caretakerId)
     CaretakerRepository.updateCaretaker(caretakerId, caretakerData)
         .then( result => {
             res.redirect('/caretakers');
+        })
+        .catch(err => {
+            err.errors.forEach(e => {
+                if (e.path.includes('email') && e.type == 'unique violation') {
+                    e.message = "Podany adres email jest już używany";
+                }
+            });
+            res.render('pages/caretaker/form', {
+                caretaker: caretakerData,
+                formMode: 'edit',
+                pageTitle: 'Edycja opiekuna',
+                btnLabel: 'Edytuj opiekuna',
+                formAction: '/caretakers/edit',
+                navLocation: 'caretaker',
+                validationErrors: err.errors
+            })
         });
 };
 

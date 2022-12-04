@@ -17,7 +17,8 @@ exports.showAddCatForm = (req, res, next) => {
         pageTitle: 'Nowy kot',
         btnLabel: 'Dodaj kota',
         formAction: '/cats/add',
-        navLocation: 'cat'
+        navLocation: 'cat',
+        validationErrors: []
         });
 };
 
@@ -31,7 +32,8 @@ exports.showEditCatForm = (req, res, next) => {
             pageTitle: 'Edycja kota',
             btnLabel: 'Edytuj kota',
             formAction: '/cats/edit',
-            navLocation: 'cat'
+            navLocation: 'cat',
+            validationErrors: []
         });
     });
 };
@@ -45,7 +47,8 @@ exports.showCatDetails = (req, res, next) => {
                 formMode: 'showDetails',
                 pageTitle: 'Szczegóły kota',
                 formAction: '',
-                navLocation: 'cat'
+                navLocation: 'cat',
+                validationErrors: []
             });
         });
 };
@@ -55,7 +58,18 @@ exports.addCat = (req, res, next) => {
     CatRepository.createCat(catData)
         .then( result => {
             res.redirect('/cats');
-        });
+        })
+        .catch(err => {
+            res.render('pages/cat/form', {
+                cat: catData,
+                formMode: 'createNew',
+                pageTitle: 'Nowy kot',
+                btnLabel: 'Dodaj kota',
+                formAction: '/cats/add',
+                navLocation: 'cat',
+                validationErrors: err.errors
+        })
+    });
 };
 
 exports.updateCat = (req, res, next) => {
@@ -64,6 +78,17 @@ exports.updateCat = (req, res, next) => {
     CatRepository.updateCat(catId, catData)
         .then( result => {
             res.redirect('/cats');
+        })
+        .catch(err => {
+            res.render('pages/cat/form', {
+                cat: catData,
+                formMode: 'edit',
+                pageTitle: 'Edycja kota',
+                btnLabel: 'Edytuj kota',
+                formAction: '/cats/edit',
+                navLocation: 'cat',
+                validationErrors: err.errors
+            })
         });
 };
 
