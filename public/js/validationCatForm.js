@@ -32,7 +32,7 @@ function validateForm() {
     } else if (!checkNumberRange(ageInput.value, 0, 50)) {
         valid = false;
         ageInput.classList.add("error-input");
-        errorAge.innerText = "Pole powinno być liczbą w zakresie od 10 do 50";
+        errorAge.innerText = "Pole powinno być liczbą w zakresie od 0 do 50";
     }
 
     if (!valid) {

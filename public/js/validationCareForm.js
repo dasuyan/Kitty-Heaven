@@ -7,13 +7,13 @@ function validateForm() {
 
     const errorCat = document.getElementById('errorCat');
     const errorCaretaker = document.getElementById('errorCaretaker');
-    const errorStartDate = document.getElementById('errorStartDate');
-    const errorEndDate = document.getElementById('errorEndDate');
+    const errorDateFrom = document.getElementById('errorDateFrom');
+    const errorDateTo = document.getElementById('errorDateTo');
     const errorTotalCost = document.getElementById('errorTotalCost');
     const errorsSummary = document.getElementById('errorsSummary');
 
     resetErrors([catInput, caretakerInput, dateFromInput, dateToInput, totalCostInput],
-        [errorCat, errorCaretaker, errorStartDate, errorEndDate, errorTotalCost],
+        [errorCat, errorCaretaker, errorDateFrom, errorDateTo, errorTotalCost],
                 errorsSummary);
 
     let valid = true;
@@ -51,21 +51,21 @@ function validateForm() {
     if (!checkRequired(dateFromInput.value)) {
         valid = false;
         dateFromInput.classList.add("error-input");
-        errorStartDate.innerText = "Pole jest wymagane";
+        errorDateFrom.innerText = "Pole jest wymagane";
     } else if (checkDateIfAfter(dateFromInput.value, nowDate)) {
         valid = false;
         dateFromInput.classList.add("error-input");
-        errorStartDate.innerText = "Data nie może być z przyszłości";
+        errorDateFrom.innerText = "Data nie może być z przyszłości";
     }
 
     if (!checkRequired(dateToInput.value)) {
         valid = false;
         dateToInput.classList.add("error-input");
-        errorEndDate.innerText = "Pole jest wymagane";
+        errorDateTo.innerText = "Pole jest wymagane";
     } else if (!checkDateIfAfter(dateToInput.value, dateFromInput.value)) {
         valid = false;
         dateToInput.classList.add("error-input");
-        errorEndDate.innerText = "Data do powinna być późniejsza niż data od";
+        errorDateTo.innerText = "Data do powinna być późniejsza niż data od";
     }
 
     if (!checkRequired(totalCostInput.value)) {
@@ -79,7 +79,7 @@ function validateForm() {
     } else if (!checkNumberRange(totalCostInput.value, 10, 1_000_000)) {
         valid = false;
         totalCostInput.classList.add("error-input");
-        errorTotalCost.innerText = "Pole powinno być liczbą w zakresie od 10 do 1000000"
+        errorTotalCost.innerText = "Pole powinno być liczbą w zakresie od 0 do 1000000"
     }
 
     if (!valid) {

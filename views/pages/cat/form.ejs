@@ -1,7 +1,9 @@
 <%- include('../../fragments/header.ejs') %>
+<script type="application/javascript" src="/js/validationCommon.js"></script>
+<script type="application/javascript" src="/js/validationCatForm.js"></script>
 <main>
   <h2><%= pageTitle %></h2>
-  <form class="form" method="post" action="<%= formAction %>" novalidate>
+  <form class="form" method="post" action="<%= formAction %>" novalidate onsubmit="return validateForm();">
     <input type="hidden" name="_id" value="<%= cat._id %>">
 
     <label for="name">Imię: <span class="symbol-required">*</span></label>
