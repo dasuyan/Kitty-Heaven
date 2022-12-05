@@ -92,8 +92,6 @@ exports.showCareDetails = (req, res, next) => {
 };
 
 exports.addCare = (req, res, next) => {
-    let a ="ass";
-    a.toI
     let allCats, allCaretakers;
     CatRepository.getCats()
         .then(cats => {
