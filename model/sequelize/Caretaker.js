@@ -13,11 +13,11 @@ const Caretaker = sequelize.define('Caretaker', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             len: {
                 args: [2, 50],
-                msg: "Pole powinno zawierać od 2 do 50 znaków"
+                msg: "len_2_50"
             }
         }
     },
@@ -26,11 +26,11 @@ const Caretaker = sequelize.define('Caretaker', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             len: {
                 args: [2, 50],
-                msg: "Pole powinno zawierać od 2 do 50 znaków"
+                msg: "len_2_50"
             }
         }
     },
@@ -40,14 +40,14 @@ const Caretaker = sequelize.define('Caretaker', {
         unique: true,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             len: {
-                args: [5, 50],
-                msg: "Pole powinno zawierać od 2 do 50 znaków"
+                args: [2, 50],
+                msg: "len_2_50"
             },
             isEmail: {
-                msg: 'Pole powinno zawierać prawidłowy adres email'
+                msg: 'isEmail'
             }
         }
     },
@@ -56,13 +56,17 @@ const Caretaker = sequelize.define('Caretaker', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             len: {
                 args: [2, 50],
-                msg: "Pole powinno zawierać od 2 do 50 znaków"
+                msg: "len_2_50"
             }
         }
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 });
 

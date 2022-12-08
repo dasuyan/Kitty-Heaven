@@ -1,56 +1,49 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../../config/sequelize/sequelize');
 
-const Cat = sequelize.define('Cat', {
+const Specialization = sequelize.define('Specialization', {
     _id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: {
-                msg: "notEmpty"
-            },
-            len: {
-                args: [2, 50],
-                msg: "len_2_50"
-            }
-        }
-    },
-    age: {
+    certificationYear: {
         type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
             notEmpty: {
                 msg: "notEmpty"
-            },
-            isInt: {
-              msg: "isInt"
-            },
-            min: {
-                args: [0],
-                msg: "min_0"
-            },
-            max: {
-                args: [50],
-                msg: "max_50"
             }
         }
     },
-    breed: {
+    certificate: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
         validate: {
-            len: {
-                args: [0, 50],
-                msg: "len_0_50"
+            notEmpty: {
+                msg: "notEmpty"
+            }
+        }
+    },
+    caretaker_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "notEmpty"
+            }
+        }
+    },
+    treatment_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "notEmpty"
             }
         }
     }
 });
 
-module.exports = Cat;
+module.exports = Specialization;

@@ -13,10 +13,10 @@ const Care = sequelize.define('Care', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             isDate: {
-                msg: "Pole powinno zawierać datę"
+                msg: "isDate"
             }
         }
     },
@@ -25,10 +25,10 @@ const Care = sequelize.define('Care', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             isDate: {
-                msg: "Pole powinno zawierać datę"
+                msg: "isDate"
             }
         }
     },
@@ -37,18 +37,18 @@ const Care = sequelize.define('Care', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             },
             isDecimal: {
-                msg: "Pole powinno zawierać liczbę"
+                msg: "isDecimal"
             },
             min: {
                 args: [0],
-                msg: "Pole powinno zawierać liczbę większą lub równą 0"
+                msg: "min_0"
             },
             max: {
                 args: [1000000],
-                msg: "Pole powinno zawierać liczbę mniejszą niż 1000000"
+                msg: "max_1000000"
             }
         }
     },
@@ -57,7 +57,7 @@ const Care = sequelize.define('Care', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             }
         }
     },
@@ -66,7 +66,7 @@ const Care = sequelize.define('Care', {
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Pole jest wymagane"
+                msg: "notEmpty"
             }
         }
     }

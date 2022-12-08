@@ -3,14 +3,24 @@ const sequelize = require('./sequelize');
 const Cat = require('../../model/sequelize/Cat');
 const Caretaker = require('../../model/sequelize/Caretaker');
 const Care = require('../../model/sequelize/Care');
+const Treatment = require('../../model/sequelize/Treatment');
+const Specialization = require('../../model/sequelize/Specialization');
+const authUtil = require("../../utils/authUtils");
 
 module.exports = () => {
     Cat.hasMany(Care, {as: 'cares', foreignKey: {name: 'cat_id', allowNull: false}, constraints: true, onDelete: 'CASCADE'});
     Care.belongsTo(Cat, {as: 'cat', foreignKey: {name: 'cat_id', allowNull: false}});
+
     Caretaker.hasMany(Care, {as: 'cares', foreignKey: {name: 'caretaker_id', allowNull: false}, constraints: true, onDelete: 'CASCADE'});
     Care.belongsTo(Caretaker, {as: 'caretaker', foreignKey: {name: 'caretaker_id', allowNull: false}});
 
-    let allCats, allCaretakers;
+    Caretaker.hasMany(Specialization, {as: 'specializations', foreignKey: {name: 'caretaker_id', allowNull: false}, constraints: true, onDelete: 'CASCADE'});
+    Specialization.belongsTo(Caretaker, {as: 'caretaker', foreignKey: {name: 'caretaker_id', allowNull: false}});
+
+    Treatment.hasMany(Specialization, {as: 'specializations', foreignKey: {name: 'treatment_id', allowNull: false}, constraints: true, onDelete: 'CASCADE'});
+    Specialization.belongsTo(Treatment, {as: 'treatment', foreignKey: {name: 'treatment_id', allowNull: false}});
+
+    let allCats, allCaretakers, allTreatments;
     return sequelize
         .sync({force: true})
         .then( () => {
@@ -36,9 +46,10 @@ module.exports = () => {
         })
         .then( caretakers => {
             if (!caretakers || caretakers.length === 0) {
+                const authUtil = require('../../utils/authUtils')
                 return Caretaker.bulkCreate([
-                    {name: 'Artur', surname: 'Konopka', email: 'artur.konopka@kheaven.com', primaryRole: 'Głaskacz'},
-                    {name: 'Mateusz', surname: 'Drabarek', email: 'mateusz.drabarek@kheaven.com', primaryRole: 'Sprzątacz kuwet'}
+                    {name: 'Artur', surname: 'Konopka', email: 'artur.konopka@kheaven.com', primaryRole: 'Głaskacz', password: authUtil.hashPassword('5678')},
+                    {name: 'Mateusz', surname: 'Drabarek', email: 'mateusz.drabarek@kheaven.com', primaryRole: 'Sprzątacz kuwet', password: authUtil.hashPassword('admin')}
                 ])
                     .then( () => {
                         return Cat.findAll();
@@ -60,6 +71,38 @@ module.exports = () => {
                 ])
             } else {
                 return cares;
+            }
+        })
+        .then( () => {
+            return Treatment.findAll();
+        })
+        .then(treatments => {
+            if (!treatments || treatments.length === 0) {
+                return Treatment.bulkCreate([
+                    {name: 'Washing', cost: '25', contraindications: 'frequent ear infections'},
+                    {name: 'Nail trimming', cost: '50', contraindications: null},
+                    {name: 'Massage', cost: '100', contraindications: 'fragile bones'},
+                ])
+                    .then( () => {
+                        return Treatment.findAll();
+                    });
+            } else {
+                return treatments;
+            }
+        })
+        .then(treatments => {
+            allTreatments = treatments;
+            return Specialization.findAll();
+        })
+        .then(specializations => {
+            if (!specializations || specializations.length === 0) {
+                return Specialization.bulkCreate([
+                    {caretaker_id: allCaretakers[0]._id, treatment_id: allTreatments[2]._id, certificate: "Professional cat masseur", certificationYear: 2006},
+                    {caretaker_id: allCaretakers[1]._id, treatment_id: allTreatments[0]._id, certificate: "Veterinary hygiene basics", certificationYear: 2015},
+                    {caretaker_id: allCaretakers[0]._id, treatment_id: allTreatments[1]._id, certificate: "Zoo-pedicure: Advanced", certificationYear: 2022},
+                ])
+            } else {
+                return specializations;
             }
         });
 };

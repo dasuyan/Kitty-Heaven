@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const Cat = require('../../model/sequelize/Cat');
 const Caretaker = require('../../model/sequelize/Caretaker');
 const Care = require('../../model/sequelize/Care');
+const {matchLoggedCaretaker} = require("../../utils/authUtils");
 
 exports.getCares = () => {
     return Care.findAll({include: [

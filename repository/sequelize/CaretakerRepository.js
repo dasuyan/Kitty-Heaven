@@ -1,6 +1,8 @@
 const Cat = require('../../model/sequelize/Cat');
 const Caretaker = require('../../model/sequelize/Caretaker');
 const Care = require('../../model/sequelize/Care');
+const authUtil = require('../../utils/authUtils')
+const authUtils = require("../../utils/authUtils");
 
 exports.getCaretakers = () => {
     return Caretaker.findAll();
@@ -25,15 +27,14 @@ exports.createCaretaker = (newCaretakerData) => {
         name: newCaretakerData.name,
         surname: newCaretakerData.surname,
         email: newCaretakerData.email,
-        primaryRole: newCaretakerData.primaryRole
+        primaryRole: newCaretakerData.primaryRole,
+        password: authUtil.hashPassword(newCaretakerData.password)
     });
 };
 
 exports.updateCaretaker = (caretakerId, caretakerData) => {
-    const name = caretakerData.name;
-    const surname = caretakerData.surname;
-    const email = caretakerData.email;
-    const primaryRole = caretakerData.primaryRole;
+    const unhashed = caretakerData.password;
+    caretakerData.password = authUtil.hashPassword(unhashed)
 
     return Caretaker.update(caretakerData, {where: {_id: caretakerId}});
 };
@@ -41,5 +42,11 @@ exports.updateCaretaker = (caretakerId, caretakerData) => {
 exports.deleteCaretaker = (caretakerId) => {
     return Caretaker.destroy({
         where: {_id: caretakerId}
+    });
+}
+
+exports.findByEmail = (email) => {
+    return Caretaker.findOne({
+        where: {email: email}
     });
 }
