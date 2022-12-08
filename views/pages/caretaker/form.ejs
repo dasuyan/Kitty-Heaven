@@ -70,8 +70,8 @@
       <% for (let e of caretaker.cares) { %>
         <tr>
           <td><a href="/cats/details/<%= e.cat._id %>"><%= e.cat.name %></a></td>
-          <td><%= e.dateFrom.toISOString().substring(0,16).replace('T', ' ') %></td>
-          <td><%= e.dateTo.toISOString().substring(0,16).replace('T', ' ') %></td>
+          <td><%= fmt.formatDate(e.dateFrom) %></td>
+          <td><%= fmt.formatDate(e.dateTo) %></td>
           <td><%= e.totalCost %></td>
         </tr>
       <% } %>

@@ -61,8 +61,8 @@
     <% for (let e of cat.cares) { %>
       <tr>
         <td><a href="/caretakers/details/<%= e.caretaker._id %>"><%= e.caretaker.name %> <%= e.caretaker.surname %></a></td>
-        <td><%= e.dateFrom.toISOString().substring(0,16).replace('T', ' ') %></td>
-        <td><%= e.dateTo.toISOString().substring(0,16).replace('T', ' ') %></td>
+        <td><%= fmt.formatDate(e.dateFrom) %></td>
+        <td><%= fmt.formatDate(e.dateTo) %></td>
         <td><%= e.totalCost %></td>
       </tr>
     <% } %>
